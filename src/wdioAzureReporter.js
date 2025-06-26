@@ -5,7 +5,7 @@ import { AzureDevOpsClient } from './azureDevOpsClient.js';
 import helpers from './helpers/index.js';
 
 class WdioAzureReporter extends WDIOReporter {
-    constructor(options) {
+    constructor(options = {}) {
         super(options);
         this.options = options;
         this.azureClient = new AzureDevOpsClient(options);
@@ -19,6 +19,8 @@ class WdioAzureReporter extends WDIOReporter {
         this.testStepFailureFlag = false;
         this.durationInMs = 0;
         this.screenshotPath = options.screenshotPath || path.resolve('.artifacts', 'screenshots');
+        this.testCaseIdRegex = options.testCaseIdRegex || /\bC(\d+)\b/;
+        this.testStepIdRegex = options.testStepIdRegex || /\[S(\d+)\]/g;
     }
 
     /**
@@ -30,7 +32,7 @@ class WdioAzureReporter extends WDIOReporter {
         if (!text || typeof text !== 'string') {
             return null;
         }
-        const match = text.match(/\bC(\d+)\b/); // Finds 'C' followed by digits, as a whole word
+        const match = text.match(this.testCaseIdRegex);
         if (match && match[1]) {
             return match[1];
         }
@@ -38,14 +40,14 @@ class WdioAzureReporter extends WDIOReporter {
     }
 
     /**
-     * Helper to extract Azure DevOps Test Case ID (numeric part) from a string.
-     * @param {string} text - The string to parse (e.g., "C2370 Some test case name").
-     * @returns {string | null} The extracted numeric ID (e.g., "2370") or null if not found.
+     * Helper to extract Azure DevOps Test Step ID (numeric part) from a string.
+     * @param {string} text - The string to parse (e.g., "C2370 [S1] Some test case name").
+     * @returns {string[]} The extracted step IDs (e.g., ["1"]).
      */
     _extractAzureDevOpsTestStepId(text) {
         if (!text || typeof text !== 'string') return [];
-        const matches = [...text.matchAll(/\[S(\d+)\]/g)];
-        return matches.map(match => match[1]); // returns array of step IDs
+        const matches = [...text.matchAll(this.testStepIdRegex)];
+        return matches.map(match => match[1]);
     }
 
     /**
