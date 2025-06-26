@@ -1,0 +1,20 @@
+{
+  "name": "wdio-azure-devops-reporter",
+  "version": "1.0.1",
+  "description": "A WebdriverIO reporter and service for integrating test results and artifacts with Azure DevOps Test Plans.",
+  "main": "index.js",
+  "type": "module",
+  "keywords": [
+    "wdio",
+    "webdriverio",
+    "azure devops",
+    "reporter",
+    "test",
+    "automation"
+  ],
+  "author": "Sachin Varghese Suresh",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0"
+  }
+}
