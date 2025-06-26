@@ -121,6 +121,12 @@ class WdioAzureReporter extends WDIOReporter {
             return;
         }
 
+        // Only upload if testResultId is valid (>0)
+        if (!this.testResultMapping.testResultId || this.testResultMapping.testResultId <= 0) {
+            console.log(`No valid testResultId for skipped test: ${test.testTitle}. Skipping upload.\n`);
+            return;
+        }
+
         this.testResultsToUpload.push(
             {
                 id: this.testResultMapping.testResultId,
