@@ -1,6 +1,6 @@
 {
   "name": "wdio-azure-devops-reporter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A WebdriverIO reporter and service for integrating test results and artifacts with Azure DevOps Test Plans.",
   "main": "index.js",
   "type": "module",
