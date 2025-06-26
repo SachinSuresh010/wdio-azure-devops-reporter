@@ -82,9 +82,15 @@ class AzureDevOpsClient {
         }
         const responseData = await this.axiosInstance.get(urlPath, params);
 
-        let resultId = responseData.data.value.find(item => item.testCase.id === testCaseId).id;
-        this.testResultMappings =
-        {
+        const result = responseData.data.value.find(item => item.testCase.id === testCaseId);
+
+        if (!result) {
+            console.warn(`AzureDevOpsClient: No test result found for testCaseId: ${testCaseId} in runId: ${runId}.`);
+            return null;
+        }
+
+        let resultId = result.id;
+        this.testResultMappings = {
             "testCaseId": testCaseId,
             "testResultId": resultId
         }
